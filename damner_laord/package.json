@@ -8,7 +8,8 @@
         "dev": "vp dev",
         "check": "vp check",
         "check:fix": "vp check --fix",
-        "types:check": "vue-tsc --noEmit"
+        "types:check": "vue-tsc --noEmit",
+        "test": "vp test run"
     },
     "dependencies": {
         "@inertiajs/vite": "^3.0.0",
@@ -16,6 +17,7 @@
         "@laravel/passkeys": "^0.2.0",
         "@lucide/vue": "^1.64.0",
         "@primeuix/themes": "^2.0.3",
+        "@tanstack/vue-table": "^8.21.3",
         "@vueuse/core": "^12.8.2",
         "chart.js": "^4.6.1",
         "class-variance-authority": "^0.7.1",
