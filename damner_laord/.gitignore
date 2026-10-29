@@ -29,7 +29,9 @@ yarn-error.log
 /.zed
 /.agents
 /.amp
-/.claude
+# Share project agents; keep personal Claude settings local
+/.claude/*
+!/.claude/agents/
 /.codex
 /.cursor
 /.factory
@@ -39,7 +41,6 @@ yarn-error.log
 /.pi
 /.mcp.json
 /AGENTS.md
-/CLAUDE.md
 /boost.json
 /opencode.json
 /opencode.jsonc
