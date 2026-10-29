@@ -1,5 +1,6 @@
 {
     "User": true,
     "Transport": true,
-    "Hotel": true
+    "Hotel": true,
+    "Payments": true
 }
