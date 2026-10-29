@@ -11,26 +11,42 @@ defineProps<{
 }>();
 </script>
 
-<!-- Two-column auth layout based on the shadcn-vue login-02 block. -->
+<!--
+    Two-column auth layout (shadcn-vue login-02, spec 01.1).
+    Both columns sit as framed cards on a soft brand-grey page so the
+    bright cover photo never meets the page edge head-on.
+-->
 <template>
-    <div class="grid min-h-svh lg:grid-cols-2">
-        <div class="flex flex-col gap-4 p-6 md:p-10">
-            <div class="flex justify-center gap-2 md:justify-start">
-                <Link
-                    :href="home()"
-                    class="flex items-center gap-2 font-medium"
-                >
-                    <span
-                        class="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground"
-                    >
-                        <AppLogoIcon class="size-4 fill-current" />
-                    </span>
-                    {{ brand.name }}
-                </Link>
-            </div>
+    <div
+        class="grid min-h-svh gap-6 bg-muted p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] dark:bg-background"
+    >
+        <aside
+            class="relative hidden overflow-hidden rounded-2xl bg-primary shadow-xl ring-1 ring-black/5 lg:block dark:ring-white/10"
+        >
+            <img
+                :src="brand.authCover"
+                :alt="`${brand.name}: travel, transport and hotel booking across Cambodia`"
+                class="absolute inset-0 size-full object-cover"
+            />
+            <!-- Soft inner edge so the photo reads as framed, not cut off -->
+            <div
+                class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08)]"
+            />
+        </aside>
+
+        <main class="flex flex-col gap-6">
+            <Link
+                :href="home()"
+                class="flex items-center justify-center gap-2 font-medium lg:justify-start"
+            >
+                <AppLogoIcon class="size-8 shadow-sm" />
+                {{ brand.name }}
+            </Link>
 
             <div class="flex flex-1 items-center justify-center">
-                <div class="flex w-full max-w-xs flex-col gap-6">
+                <div
+                    class="flex w-full max-w-sm flex-col gap-6 rounded-2xl border bg-card p-6 text-card-foreground shadow-xl sm:p-8 dark:bg-muted/40 dark:shadow-black/40"
+                >
                     <div
                         v-if="title || description"
                         class="flex flex-col items-center gap-1 text-center"
@@ -48,24 +64,13 @@ defineProps<{
                     <slot />
                 </div>
             </div>
-        </div>
 
-        <aside
-            class="relative hidden flex-col justify-between bg-primary p-10 text-primary-foreground lg:flex"
-        >
-            <div class="flex flex-col gap-4">
-                <AppLogoIcon class="size-12 fill-current" />
-                <div>
-                    <p class="text-2xl font-semibold">{{ brand.nameKhmer }}</p>
-                    <p class="text-3xl font-bold">{{ brand.product }}</p>
-                </div>
-                <p class="max-w-sm text-sm opacity-80">{{ brand.tagline }}</p>
-            </div>
-
-            <p class="flex items-center gap-2 text-xs opacity-70">
-                <ShieldCheck class="size-4" />
+            <p
+                class="flex items-center justify-center gap-1.5 text-xs text-muted-foreground lg:justify-start"
+            >
+                <ShieldCheck class="size-3.5" />
                 {{ brand.notice }}
             </p>
-        </aside>
+        </main>
     </div>
 </template>
