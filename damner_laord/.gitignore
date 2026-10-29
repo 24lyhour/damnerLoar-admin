@@ -44,4 +44,6 @@ yarn-error.log
 /opencode.json
 /opencode.jsonc
 
-.env
+# Project docs (local only)
+/travel_ticket_booking_ecosystem_lifecycle.pdf
+/DamnerLaor_Admin_Dashboard_UIUX_v1.2.pdf
