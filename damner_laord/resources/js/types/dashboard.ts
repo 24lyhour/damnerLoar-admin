@@ -7,15 +7,18 @@ export type BookingStatus =
     | 'cancelled'
     | 'boarding';
 
-export type KpiFormat = 'number' | 'currency';
+export type KpiFormat = 'number' | 'currency' | 'percent';
 
 export type Kpi = {
     key: string;
     label: string;
     value: number;
     format: KpiFormat;
-    /** Percent change vs the previous period, e.g. 8.2 */
+    /** Change vs the previous period, e.g. 8.2 */
     change?: number;
+    /** "percent" -> 8.2%, "points" -> 0.3 pt */
+    changeUnit?: 'percent' | 'points';
+    changeLabel?: string;
     hint?: string;
 };
 
@@ -44,6 +47,114 @@ export type ChartSeries = {
 export type ChartSlice = {
     label: string;
     value: number;
+};
+
+export type BarListItem = {
+    label: string;
+    value: number;
+    /** Optional text on the right, e.g. "75% of previous" */
+    note?: string;
+};
+
+export type ActivityTone = 'success' | 'error' | 'neutral';
+
+export type ActivityItem = {
+    key: string;
+    time: string;
+    title: string;
+    description: string;
+    tone: ActivityTone;
+};
+
+export type ActiveHold = {
+    reference: string;
+    item: string;
+    /** Seconds left before the hold expires */
+    secondsLeft: number;
+};
+
+export type BookingsTracker = {
+    generatedAt: string;
+    kpis: Kpi[];
+    funnel: {
+        steps: BarListItem[];
+        insight: string;
+    };
+    activity: ActivityItem[];
+    byService: ChartSlice[];
+    busTripType: {
+        total: number;
+        slices: ChartSlice[];
+    };
+    activeHolds: ActiveHold[];
+};
+
+export type SettlementStatus = 'expected' | 'ready' | 'settled' | 'paid';
+
+export type Settlement = {
+    date: string;
+    flow: string;
+    amount: number;
+    status: SettlementStatus;
+};
+
+export type ServiceRevenue = {
+    service: ServiceType;
+    bookings: number;
+    gross: number;
+    commission: number;
+    commissionRate: number;
+    refunds: number;
+    /** Share of bookings that are round-trip, null when not applicable */
+    roundTripShare: number | null;
+};
+
+export type MoneyLine = {
+    label: string;
+    amount: number;
+};
+
+export type FinanceTracker = {
+    period: { label: string; from: string; to: string };
+    kpis: Kpi[];
+    cashFlow: {
+        labels: string[];
+        series: ChartSeries[];
+    };
+    moneyFlow: {
+        lines: MoneyLine[];
+        net: MoneyLine;
+        note: string;
+    };
+    revenueByService: ServiceRevenue[];
+    settlements: Settlement[];
+};
+
+export type TripStatus =
+    | 'scheduled'
+    | 'boarding'
+    | 'departed'
+    | 'delayed'
+    | 'cancelled';
+
+export type Departure = {
+    time: string;
+    route: string;
+    operator: string;
+    seatsSold: number;
+    seatsTotal: number;
+    boarded: number;
+    roundTripPassengers: number;
+    status: TripStatus;
+    /** Minutes late, only for delayed trips */
+    delayMinutes?: number;
+};
+
+export type TripsTracker = {
+    generatedAt: string;
+    kpis: Kpi[];
+    alerts: ActivityItem[];
+    departures: Departure[];
 };
 
 export type DashboardOverview = {

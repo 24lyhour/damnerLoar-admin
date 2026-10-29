@@ -3,8 +3,13 @@ import { ArrowDownRight, ArrowUpRight } from '@lucide/vue';
 import type { LucideIcon } from '@lucide/vue';
 import { computed } from 'vue';
 import { Card } from '@/components/ui/card';
-import { formatCurrency, formatNumber, formatPercent } from '@/lib/format';
-import type { KpiFormat } from '@/types';
+import {
+    formatCurrency,
+    formatNumber,
+    formatPercent,
+    formatPoints,
+} from '@/lib/format';
+import type { Kpi, KpiFormat } from '@/types';
 
 const props = withDefaults(
     defineProps<{
@@ -12,20 +17,30 @@ const props = withDefaults(
         value: number;
         format?: KpiFormat;
         change?: number;
+        changeUnit?: Kpi['changeUnit'];
         changeLabel?: string;
         hint?: string;
         icon?: LucideIcon;
     }>(),
     {
         format: 'number',
+        changeUnit: 'percent',
         changeLabel: 'vs yesterday',
     },
 );
 
-const displayValue = computed(() =>
-    props.format === 'currency'
-        ? formatCurrency(props.value)
-        : formatNumber(props.value),
+const valueFormatters: Record<KpiFormat, (value: number) => string> = {
+    number: formatNumber,
+    currency: formatCurrency,
+    percent: (value) => formatPercent(value),
+};
+
+const displayValue = computed(() => valueFormatters[props.format](props.value));
+
+const displayChange = computed(() =>
+    props.changeUnit === 'points'
+        ? formatPoints(props.change ?? 0)
+        : formatPercent(props.change ?? 0),
 );
 
 const isUp = computed(() => (props.change ?? 0) >= 0);
@@ -61,7 +76,7 @@ const isUp = computed(() => (props.change ?? 0) >= 0);
                     :is="isUp ? ArrowUpRight : ArrowDownRight"
                     class="size-3.5"
                 />
-                {{ formatPercent(change) }}
+                {{ displayChange }}
             </span>
             {{ changeLabel }}
         </p>

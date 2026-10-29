@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/dashboard')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
+        Route::get('/', 'overview')->name('dashboard');
+        Route::get('bookings', 'bookings')->name('dashboard.bookings');
+        Route::get('finance', 'finance')->name('dashboard.finance');
+        Route::get('trips', 'trips')->name('dashboard.trips');
+    });
 });
 
 require __DIR__.'/settings.php';
