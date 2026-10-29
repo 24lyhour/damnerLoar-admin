@@ -3,5 +3,6 @@
     "Transport": true,
     "Hotel": true,
     "Payments": true,
-    "Customer": true
+    "Customer": true,
+    "Booking": true
 }
