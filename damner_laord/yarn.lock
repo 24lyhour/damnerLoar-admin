@@ -222,75 +222,47 @@
   resolved "https://registry.npmjs.org/@polka/url/-/url-1.0.0-next.29.tgz"
   integrity sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==
 
-"@primeicons/core@8.0.2":
-  version "8.0.2"
-  resolved "https://registry.npmjs.org/@primeicons/core/-/core-8.0.2.tgz"
-  integrity sha512-VySryvfIQH2xzNVXISIQg357gAt4oFYX2vKy27tWMB7UvEHu/gjRpeilBty3LBln7oVuAdFLPYOWr/FtTH8eJw==
+"@primeuix/styled@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.npmjs.org/@primeuix/styled/-/styled-0.7.4.tgz"
+  integrity sha512-QSO/NpOQg8e9BONWRBx9y8VGMCMYz0J/uKfNJEya/RGEu7ARx0oYW0ugI1N3/KB1AAvyGxzKBzGImbwg0KUiOQ==
   dependencies:
-    "@primeuix/utils" "^0.8.0"
+    "@primeuix/utils" "^0.6.1"
 
-"@primeicons/vue@^8.0.0":
-  version "8.0.2"
-  resolved "https://registry.npmjs.org/@primeicons/vue/-/vue-8.0.2.tgz"
-  integrity sha512-HRb3kgnj0XbqZvYCkgnF5LSAKNoRAgU8hwXcVqeCSKQKO3uJoI4oYDtEwULM8Rxy2avhiJuozlVHugskDF4HdQ==
+"@primeuix/styles@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/@primeuix/styles/-/styles-2.0.3.tgz"
+  integrity sha512-2ykAB6BaHzR/6TwF8ShpJTsZrid6cVIEBVlookSdvOdmlWuevGu5vWOScgIwqWwlZcvkFYAGR/SUV3OHCTBMdw==
   dependencies:
-    "@primeicons/core" "8.0.2"
-    "@primeuix/utils" "^0.8.0"
+    "@primeuix/styled" "^0.7.4"
 
-"@primeui/license-manager@^1.0.0":
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/@primeui/license-manager/-/license-manager-1.1.0.tgz"
-  integrity sha512-irjhOGs6Xjwh1JhMyXtdUsYCsve6kBySZzDUhS/mWxsjwQm/wSN7oulyP/f5huJKdhZSzaN6rVApwpp4nDWE1g==
-
-"@primeuix/motion@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/@primeuix/motion/-/motion-1.0.0.tgz"
-  integrity sha512-rqpFRKmUVp9BI3YQKdok0rLUwzYShXzuuxy72Kq74xYRV14eR+4+XrIXOdyVs7j7CYV0ajYowiRpJCrVgdrq6A==
+"@primeuix/themes@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/@primeuix/themes/-/themes-2.0.3.tgz"
+  integrity sha512-3fS1883mtCWhgUgNf/feiaaDSOND4EBIOu9tZnzJlJ8QtYyL6eFLcA6V3ymCWqLVXQ1+lTVEZv1gl47FIdXReg==
   dependencies:
-    "@primeuix/utils" "^0.8.0"
+    "@primeuix/styled" "^0.7.4"
 
-"@primeuix/styled@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/@primeuix/styled/-/styled-1.2.0.tgz"
-  integrity sha512-PaZ2CMkMGcW03XO3CawHbCCxB9rj0IFKj/7lOmNLYw9s4UqgeleJVii2BJ7P0Un3OxIG7oU9wnjsamrp1QFchQ==
+"@primeuix/utils@^0.6.1", "@primeuix/utils@^0.6.2":
+  version "0.6.4"
+  resolved "https://registry.npmjs.org/@primeuix/utils/-/utils-0.6.4.tgz"
+  integrity sha512-pZ5f+vj7wSzRhC7KoEQRU5fvYAe+RP9+m39CTscZ3UywCD1Y2o6Fe1rRgklMPSkzUcty2jzkA0zMYkiJBD1hgg==
+
+"@primevue/core@4.5.5":
+  version "4.5.5"
+  resolved "https://registry.npmjs.org/@primevue/core/-/core-4.5.5.tgz"
+  integrity sha512-JpkXhq1ddc70JdsC3CC4dM+UbeeWuCW/8DpS9dNBfrOk824TLSlRlMEGFyVKqRMn5WPQvYLiy3xXfLQeNdSqhQ==
   dependencies:
-    "@primeuix/utils" "^0.8.3"
+    "@primeuix/styled" "^0.7.4"
+    "@primeuix/utils" "^0.6.2"
 
-"@primeuix/styles@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/@primeuix/styles/-/styles-3.1.0.tgz"
-  integrity sha512-xl1e8gcUhsqu1YgGIUe3R/PSKJHk88NMVwnOTVZZfptx955Rw0GkwvhRaeBh9iPVz4p5b7t9OiGJDWOu2qpX0Q==
+"@primevue/icons@4.5.5":
+  version "4.5.5"
+  resolved "https://registry.npmjs.org/@primevue/icons/-/icons-4.5.5.tgz"
+  integrity sha512-eteOhTdAOXEYE9qW1AOrBBgDxQ2szHJxSkEK1XVdV2TKxGM5FQf03Ovms0VDyZTc16XBIgvwYjXJQS0BPbhPaA==
   dependencies:
-    "@primeuix/styled" "^1.2.0"
-
-"@primeuix/themes@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/@primeuix/themes/-/themes-3.1.0.tgz"
-  integrity sha512-/co1Vfo5JunRvjatdrTNYJ37j3fyXlvlN/NHgSNXToLP0ahhv4fxWAE5Q5A0C1PS/krrpXfXS2XIUBmKj/hzFg==
-  dependencies:
-    "@primeuix/styled" "^1.2.0"
-
-"@primeuix/utils@^0.8.0", "@primeuix/utils@^0.8.3":
-  version "0.8.3"
-  resolved "https://registry.npmjs.org/@primeuix/utils/-/utils-0.8.3.tgz"
-  integrity sha512-UyFtnzxHfG7UqbOqUsjMXpe96h36eDre9Iw+zkZuJHsplHdoXNWgovDkoGZNxw4V5ZUHP1Y3pIu0kJw0OhmT0g==
-
-"@primevue/core@5.0.4":
-  version "5.0.4"
-  resolved "https://registry.npmjs.org/@primevue/core/-/core-5.0.4.tgz"
-  integrity sha512-EK2te4t5VaCAPddRo47z3quBwFPK0Xf/f0Lk7EGXa3u+lXy63WI4JV2tYjtPoONTD4ulsrtyUOD0iopWh8GicQ==
-  dependencies:
-    "@primeui/license-manager" "^1.0.0"
-    "@primeuix/styled" "^1.2.0"
-    "@primeuix/utils" "^0.8.3"
-
-"@primevue/icons@5.0.4":
-  version "5.0.4"
-  resolved "https://registry.npmjs.org/@primevue/icons/-/icons-5.0.4.tgz"
-  integrity sha512-ImyUXU8kztbBQwZPjMYDRsMV3kpw+a16JKTViZp9tZNpKWod83yUDbGg5TApxfu62o089QwCONMl5BHfb28eYA==
-  dependencies:
-    "@primeuix/utils" "^0.8.3"
-    "@primevue/core" "5.0.4"
+    "@primeuix/utils" "^0.6.2"
+    "@primevue/core" "4.5.5"
 
 "@rolldown/pluginutils@^1.0.1":
   version "1.0.1"
@@ -1241,19 +1213,16 @@ pretty-format@^27.0.2:
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
 
-primevue@^5.0.4:
-  version "5.0.4"
-  resolved "https://registry.npmjs.org/primevue/-/primevue-5.0.4.tgz"
-  integrity sha512-Tqi45bj2eQMZ47dGeKnSPzSSm9BX+cgkKaLQOk9ScFLYIHg/yOHRCLPz9rw3e9eA/uz2e6ll5dtV9yWUVQoRBw==
+primevue@^4.5.5:
+  version "4.5.5"
+  resolved "https://registry.npmjs.org/primevue/-/primevue-4.5.5.tgz"
+  integrity sha512-Kv5REIewCdP806QaoU+4nBXfmpzOGFKkZ9qH4KsL6MjiAQVc4PUzypt8erl4r3Vzh3nr3aWZIxkxYRRsLGiX2A==
   dependencies:
-    "@primeicons/vue" "^8.0.0"
-    "@primeui/license-manager" "^1.0.0"
-    "@primeuix/motion" "^1.0.0"
-    "@primeuix/styled" "^1.2.0"
-    "@primeuix/styles" "^3.1.0"
-    "@primeuix/utils" "^0.8.3"
-    "@primevue/core" "5.0.4"
-    "@primevue/icons" "5.0.4"
+    "@primeuix/styled" "^0.7.4"
+    "@primeuix/styles" "^2.0.3"
+    "@primeuix/utils" "^0.6.2"
+    "@primevue/core" "4.5.5"
+    "@primevue/icons" "4.5.5"
 
 react-is@^17.0.1:
   version "17.0.2"
@@ -1579,7 +1548,7 @@ vue-tsc@^3.3.13, "vue-tsc@~3.2.0 || ~3.3.0":
     "@volar/typescript" "2.4.28"
     "@vue/language-core" "3.3.13"
 
-"vue@^2.7.0 || ^3.0.0", vue@^3, vue@^3.0.0, vue@^3.2.0, "vue@^3.2.25 || ^3.6.0-rc.10", vue@^3.5.0, vue@^3.5.13, "vue@>= 3.4.0", vue@>=3.0.1, vue@>=3.3.0:
+"vue@^2.7.0 || ^3.0.0", vue@^3.0.0, vue@^3.2.0, "vue@^3.2.25 || ^3.6.0-rc.10", vue@^3.5.0, vue@^3.5.13, "vue@>= 3.4.0", vue@>=3.0.1, vue@>=3.3.0:
   version "3.5.44"
   resolved "https://registry.npmjs.org/vue/-/vue-3.5.44.tgz"
   integrity sha512-dvvmaOCG7lAMkJTPqPwWeGMsPS6DIsFsfZDUgBp9V6mHf9b3+/wyVwYR4Es+WV6uJC0FKRxp81Obcq0ZwUcGFQ==

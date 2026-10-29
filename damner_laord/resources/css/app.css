@@ -1,4 +1,8 @@
+/* PrimeVue sits below Tailwind utilities, so utility classes can override it */
+@layer theme, base, primevue, components, utilities;
+
 @import 'tailwindcss';
+@import 'tailwindcss-primeui';
 
 @import 'tw-animate-css';
 
