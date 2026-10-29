@@ -103,6 +103,9 @@
                     "@php artisan install:features --ansi"
                 ]
             }
+        },
+        "merge-plugin": {
+            "include": ["Modules/*/composer.json"]
         }
     },
     "config": {
