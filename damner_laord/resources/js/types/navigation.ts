@@ -12,3 +12,20 @@ export type NavItem = {
     icon?: LucideIcon;
     isActive?: boolean;
 };
+
+/** Sidebar entry. Without an href it renders as a disabled "Soon" item. */
+export type SidebarNavItem = Omit<NavItem, 'href'> & {
+    href?: NavItem['href'];
+    badge?: number;
+};
+
+export type NavGroup = {
+    label?: string;
+    items: SidebarNavItem[];
+};
+
+export type PageTab = {
+    title: string;
+    href?: NavItem['href'];
+    icon?: LucideIcon;
+};
