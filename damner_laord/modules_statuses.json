@@ -4,5 +4,6 @@
     "Hotel": true,
     "Payments": true,
     "Customer": true,
-    "Booking": true
+    "Booking": true,
+    "Partners": true
 }
