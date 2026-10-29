@@ -2,5 +2,6 @@
     "User": true,
     "Transport": true,
     "Hotel": true,
-    "Payments": true
+    "Payments": true,
+    "Customer": true
 }
