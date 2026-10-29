@@ -9,5 +9,7 @@ parameters:
         - config/
         - database/
         - routes/
+        - Modules/Merchant/app/
+        - Modules/Merchant/database/
 
     level: 7

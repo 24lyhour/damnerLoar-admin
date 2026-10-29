@@ -49,5 +49,6 @@ Run and pass: `npm run build`, `npx vue-tsc --noEmit`, `vendor/bin/pint --test`,
 ## Current state (update as it changes)
 
 - **Built:** Dashboard, all 4 tabs (sample data from `app/Services/Dashboard/*`), the brand theme, the login page (login-02 layout), and the admin sidebar.
-- **Planned module renames:** `Partners` → `Merchant`, `User` → `Admin`, `Payments` → `Payment`. Add a new `Setting` module.
+- **Merchant module:** `Merchant` + `MerchantDocument` models, enums, migrations, factories and tests are done (no screens yet). Shared `App\Concerns\HasUuid` and `EnumOptions` exist.
+- **Planned module renames:** `User` → `Admin`, `Payments` → `Payment`. Add a new `Setting` module. (`Partners` → `Merchant` is done.)
 - **Next:** shared foundation (Money, audit log, roles, `module::` page resolver), then the Admin module as the template.

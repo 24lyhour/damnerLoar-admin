@@ -5,8 +5,8 @@
     "Payments": true,
     "Customer": true,
     "Booking": true,
-    "Partners": true,
     "Finance": true,
     "Marketing": true,
-    "Support": true
+    "Support": true,
+    "Merchant": true
 }

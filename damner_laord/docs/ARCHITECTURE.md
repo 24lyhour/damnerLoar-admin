@@ -24,7 +24,7 @@ The structure is adapted from the `universe` project (`Modules/Hotel`), with fix
 
 **Dashboard is not a module.** It lives in `app/` (`DashboardController`, `app/Services/Dashboard/*`) and only reads other modules' data through their Lookup contracts.
 
-Module names are **singular PascalCase**. Pending renames: `Partners` → `Merchant`, `User` → `Admin`, `Payments` → `Payment`.
+Module names are **singular PascalCase**. Pending renames: `User` → `Admin`, `Payments` → `Payment` (`Partners` → `Merchant` is done).
 
 ---
 

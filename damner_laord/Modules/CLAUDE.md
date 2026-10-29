@@ -40,3 +40,5 @@ Create these, in this order, and only what the feature needs:
 ## Checklist before done
 
 `vendor/bin/pint --test` · `vendor/bin/phpstan analyse` · `php artisan test --filter=<Module>` · `npm run build` · `npx vue-tsc --noEmit`
+
+When a module gets its first real code, add `Modules/<Name>/app/` and `Modules/<Name>/database/` to `paths` in `phpstan.neon`, otherwise PHPStan never checks it. Module tests run automatically (`phpunit.xml` → `Modules` suite).
