@@ -55,4 +55,30 @@ enum MerchantStatus: string
     {
         return $this === self::Active;
     }
+
+    /**
+     * Allowed moves in the merchant lifecycle. Rejected is final.
+     *
+     * @return list<self>
+     */
+    public function nextStatuses(): array
+    {
+        return match ($this) {
+            self::Pending, self::ChangesRequested => [self::ChangesRequested, self::Active, self::Rejected],
+            self::Active => [self::Suspended],
+            self::Suspended => [self::Active],
+            self::Rejected => [],
+        };
+    }
+
+    public function canTransitionTo(self $next): bool
+    {
+        return in_array($next, $this->nextStatuses(), true);
+    }
+
+    /** Still in the application phase (spec 03.2 approval screen). */
+    public function isUnderReview(): bool
+    {
+        return in_array($this, [self::Pending, self::ChangesRequested], true);
+    }
 }

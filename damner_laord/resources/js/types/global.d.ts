@@ -20,6 +20,8 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
+            /** Sidebar counters shared by each module, e.g. { merchants: 3 } */
+            navBadges?: Partial<Record<string, number | null>>;
             [key: string]: unknown;
         };
     }

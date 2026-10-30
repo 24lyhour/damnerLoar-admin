@@ -9,9 +9,12 @@ import type {
 export const PER_PAGE_OPTIONS = [10, 20, 50] as const;
 export const DEFAULT_PER_PAGE = 20;
 
-/** "-created_at" -> { key: "created_at", direction: "desc" } */
-export function parseSort(sort: string | null | undefined): SortState {
-    if (!sort) {
+/**
+ * "-created_at" -> { key: "created_at", direction: "desc" }
+ * Anything that isn't a non-empty string (e.g. a bad prop) means "no sort".
+ */
+export function parseSort(sort: unknown): SortState {
+    if (typeof sort !== 'string' || sort === '') {
         return null;
     }
 

@@ -1,3 +1,6 @@
+import type { InertiaLinkProps } from '@inertiajs/vue3';
+import type { LucideIcon } from '@lucide/vue';
+
 /** Pagination block Laravel sends with `Resource::collection($paginator)`. */
 export type PaginationMeta = {
     current_page: number;
@@ -40,6 +43,23 @@ export type TableColumn<T> = {
 };
 
 export type RowKey<T> = (keyof T & string) | ((row: T) => string);
+
+/** One entry in a row's "⋯" menu (DamnerLaorRowActions). */
+export type RowAction = {
+    key: string;
+    label: string;
+    icon?: LucideIcon;
+    /** Navigate (Wayfinder route); otherwise use onSelect */
+    href?: InertiaLinkProps['href'];
+    /** Open `href` as an InertiaUI modal (Inertia::modal route) */
+    modal?: boolean;
+    onSelect?: () => void;
+    /** Red text, shown last after a separator */
+    destructive?: boolean;
+    /** Leave it out entirely (e.g. no permission) */
+    hidden?: boolean;
+    disabled?: boolean;
+};
 
 export type StatusTab = {
     /** null = the "All" tab */

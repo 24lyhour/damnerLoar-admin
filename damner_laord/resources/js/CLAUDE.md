@@ -13,7 +13,7 @@ Applies to `resources/js/` and every `Modules/*/resources/js/`. Full reference: 
 | Shared types                    | `types/` (exported through `types/index.ts`)                                                                                          |
 | App-wide config                 | `config/`: navigation, brand, status → label/tone maps                                                                                |
 | Helpers                         | `lib/format.ts` (currency, number, percent, dates), `lib/utils.ts` (`cn`)                                                             |
-| Module pages                    | `Modules/<Name>/resources/js/pages/Dashboard/<Entity>/<Page>.vue`                                                                     |
+| Module pages                    | `Modules/<Name>/resources/js/pages/Dashboard/V1/<Entity>/<Page>.vue`                                                                  |
 | Module components / types / zod | `Modules/<Name>/resources/js/{components,types,validations}/`                                                                         |
 | Generated (never edit)          | `routes/`, `actions/`, `wayfinder/` (Wayfinder output)                                                                                |
 
@@ -27,6 +27,7 @@ Applies to `resources/js/` and every `Modules/*/resources/js/`. Full reference: 
 - **Statuses:** use `StatusBadge` with a tone from the backend enum or a `config/*` map. Pending is grey; never orange.
 - **Money and numbers:** use `lib/format.ts`, add `tabular-nums` and right-align numbers. Booking references use `font-mono`.
 - **Forms:** Inertia `<Form>` or `useForm`, with shadcn `Field` components and `FieldError`; zod schemas mirror the Laravel Request rules.
+- **Modals:** InertiaUI Modal (`@inertiaui/modal-vue`). Modal pages wrap their fields in `DamnerFormModal` + `DamnerFormField` (`@/components/DamnerFormModal`); open them with `<ModalLink :href="route(...).url">` or a `RowAction` with `modal: true`. Right-hand slideover and persistent by default (`putConfig` in `app.ts`).
 - **Theme:** use the theme tokens (`bg-primary`, `text-muted-foreground`, `bg-chart-1`…). No hex colours in components.
 - **Layout:** works at phone width; KPI grids use the responsive classes from `KpiGrid`.
 

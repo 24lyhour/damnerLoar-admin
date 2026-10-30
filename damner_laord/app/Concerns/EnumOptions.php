@@ -13,12 +13,22 @@ trait EnumOptions
      */
     public static function options(): array
     {
-        return array_map(fn (self $case): array => [
-            'value' => $case->value,
-            'label' => $case->label(),
-            'labelKh' => $case->labelKh(),
-            'tone' => $case->tone(),
-        ], self::cases());
+        return array_map(fn (self $case): array => $case->toOption(), self::cases());
+    }
+
+    /**
+     * One case as Vue receives it (status badges, filters).
+     *
+     * @return array{value: string, label: string, labelKh: string, tone: string}
+     */
+    public function toOption(): array
+    {
+        return [
+            'value' => $this->value,
+            'label' => $this->label(),
+            'labelKh' => $this->labelKh(),
+            'tone' => $this->tone(),
+        ];
     }
 
     /**

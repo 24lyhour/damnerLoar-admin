@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import {
     SidebarGroup,
     SidebarGroupLabel,
@@ -9,13 +9,21 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
-import type { NavGroup } from '@/types';
+import type { NavGroup, SidebarNavItem } from '@/types';
 
 defineProps<{
     groups: NavGroup[];
 }>();
 
 const { isCurrentOrParentUrl } = useCurrentUrl();
+const page = usePage();
+
+/** Work-waiting counter from the shared `navBadges` prop (0 / null hides it). */
+function badgeFor(item: SidebarNavItem): number | null {
+    return item.badgeKey
+        ? (page.props.navBadges?.[item.badgeKey] ?? null)
+        : null;
+}
 </script>
 
 <template>
@@ -50,10 +58,10 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
                 </SidebarMenuButton>
 
                 <SidebarMenuBadge
-                    v-if="item.badge"
-                    class="rounded-full bg-sidebar-primary text-sidebar-primary-foreground"
+                    v-if="badgeFor(item)"
+                    class="rounded-full bg-sidebar-primary text-sidebar-primary-foreground peer-hover/menu-button:text-sidebar-primary-foreground peer-data-[active=true]/menu-button:text-sidebar-primary-foreground"
                 >
-                    {{ item.badge }}
+                    {{ badgeFor(item) }}
                 </SidebarMenuBadge>
                 <SidebarMenuBadge
                     v-else-if="!item.href"

@@ -35,6 +35,8 @@ describe('sort helpers', () => {
             direction: 'asc',
         });
         expect(parseSort(null)).toBeNull();
+        // Regression: an empty PHP array arrived as [] and filters.sort was Array.prototype.sort
+        expect(parseSort(Array.prototype.sort)).toBeNull();
         expect(formatSort({ key: 'amount', direction: 'desc' })).toBe(
             '-amount',
         );

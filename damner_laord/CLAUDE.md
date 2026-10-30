@@ -32,7 +32,7 @@ Run everything from this folder (`damner_laord/`), never from the parent.
 ## Rules that always apply
 
 1. **Follow the spec.** Screens, labels, statuses, roles and limits come from the PDF. If code and spec disagree, ask. Don't guess.
-2. **Follow the module structure** in `docs/ARCHITECTURE.md`. Controllers stay thin. Writes go in Actions, reads go in Queries.
+2. **Follow the module structure** in `docs/ARCHITECTURE.md` (the `universe` layout; `Modules/Merchant` is the reference). Controllers stay thin. Page data comes from `Get…DataAction`s, writes go in `{Verb}{Entity}Action`s, create/edit/confirm screens are InertiaUI modal routes.
 3. **Money is integer cents.** Never use float or `decimal` arithmetic for amounts. `App\Support\Money` arrives with the shared foundation.
 4. **Every admin write is audited** and checked against a Policy (5 roles: Super Admin, Operations, Finance, Support, Marketing).
 5. **Second approver ("maker-checker") rules live in the Action,** not only in the UI. This covers refunds over $100 and all payout batches.
@@ -48,7 +48,11 @@ Run and pass: `npm run build`, `npx vue-tsc --noEmit`, `vendor/bin/pint --test`,
 
 ## Current state (update as it changes)
 
-- **Built:** Dashboard, all 4 tabs (sample data from `app/Services/Dashboard/*`), the brand theme, the login page (login-02 layout), and the admin sidebar.
-- **Merchant module:** `Merchant` + `MerchantDocument` models, enums, migrations, factories and tests are done (no screens yet). Shared `App\Concerns\HasUuid` and `EnumOptions` exist.
+- **Built:** Dashboard, all 4 tabs (sample data from `app/Services/Dashboard/*`), the brand theme and logo, the login page (login-02 layout with cover image), and the admin sidebar with module badges.
+- **Shared UI:** `DamnerLaorTable` (list pages, row "⋯" menu), `DamnerFormModal` + `DamnerFormField` (modal forms), `components/common/*`, charts.
+- **Merchant module (done, the reference module):** 03.1 list + 03.2 approval screens, invite, edit, status lifecycle (approve / request changes / reject / suspend / reactivate) as modals, checklist verification, internal notes, sidebar badge, seeder (42 merchants) and 39 tests. Copy its structure for new modules. Audit log and real roles are still TODO (policy = "any admin" for now). Export button and payout bank account are not built yet.
+- **Structure follows `universe`:** `routes/dashboard.php` (prefix `/dashboard`), `Dashboard/V1` controllers, actions, requests and pages, `Get…DataAction` reads. Module pages render as `module::Dashboard/V1/…` via `resources/js/lib/resolvePage.ts`.
+- **Modals:** InertiaUI Modal v3 (universe's momentum-modal doesn't support Inertia v3). Create/edit/confirm screens are `Inertia::modal(...)->baseRoute(...)` routes using `DamnerFormModal`. `app.blade.php` syncs `SsrState` so direct modal URLs work.
 - **Planned module renames:** `User` → `Admin`, `Payments` → `Payment`. Add a new `Setting` module. (`Partners` → `Merchant` is done.)
-- **Next:** shared foundation (Money, audit log, roles, `module::` page resolver), then the Admin module as the template.
+- **Known blocker:** the 4 empty `Modules/Transport/resources/js/pages/dashboard/Transport/*.vue` files break `npm run build` until they get content.
+- **Next:** shared foundation (Money, audit log, roles & permissions), then the Admin and Setting modules, then Transport.

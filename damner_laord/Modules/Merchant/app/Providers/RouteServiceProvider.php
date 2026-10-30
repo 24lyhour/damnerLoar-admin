@@ -26,6 +26,15 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
         $this->mapWebRoutes();
+        $this->mapDashboardRoutes();
+    }
+
+    /**
+     * Admin dashboard pages and modals (routes/dashboard.php).
+     */
+    protected function mapDashboardRoutes(): void
+    {
+        Route::middleware('web')->group(module_path($this->name, '/routes/dashboard.php'));
     }
 
     /**

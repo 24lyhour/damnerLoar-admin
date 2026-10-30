@@ -110,6 +110,18 @@
     es-toolkit "^1.33.0"
     laravel-precognition "^2.1.0"
 
+"@inertiaui/modal-vue@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.npmjs.org/@inertiaui/modal-vue/-/modal-vue-3.1.2.tgz"
+  integrity sha512-M9zi98yWA4tcfT99dTPdED1lgeIS+OoKlr8pUgScYDRMABoEjfTXXgC6+ZR8cJKW8uNtdEOUNKbFQ8+nMvNJMQ==
+  dependencies:
+    "@inertiaui/vanilla" "^1.0.2"
+
+"@inertiaui/vanilla@^1.0.2":
+  version "1.6.0"
+  resolved "https://registry.npmjs.org/@inertiaui/vanilla/-/vanilla-1.6.0.tgz"
+  integrity sha512-33xnfOYF1J7dzZhiWlV7g49C1jLZz2EHirhT+YruWmYZprNhcq67yDcDp8mHT4kQuswOnHL5VsQPERAoIwcb0g==
+
 "@internationalized/date@^3.5.0":
   version "3.12.4"
   resolved "https://registry.npmjs.org/@internationalized/date/-/date-3.12.4.tgz"
@@ -1577,7 +1589,7 @@ vue-tsc@^3.3.13, "vue-tsc@~3.2.0 || ~3.3.0":
     "@volar/typescript" "2.4.28"
     "@vue/language-core" "3.3.13"
 
-"vue@^2.7.0 || ^3.0.0", vue@^3.0.0, vue@^3.2.0, "vue@^3.2.25 || ^3.6.0-rc.10", vue@^3.5.0, vue@^3.5.13, "vue@>= 3.4.0", vue@>=3.0.1, vue@>=3.2, vue@>=3.3.0:
+"vue@^2.7.0 || ^3.0.0", vue@^3.0.0, vue@^3.2.0, "vue@^3.2.25 || ^3.6.0-rc.10", vue@^3.4.x, vue@^3.5.0, vue@^3.5.13, "vue@>= 3.4.0", vue@>=3.0.1, vue@>=3.2, vue@>=3.3.0:
   version "3.5.44"
   resolved "https://registry.npmjs.org/vue/-/vue-3.5.44.tgz"
   integrity sha512-dvvmaOCG7lAMkJTPqPwWeGMsPS6DIsFsfZDUgBp9V6mHf9b3+/wyVwYR4Es+WV6uJC0FKRxp81Obcq0ZwUcGFQ==
@@ -1676,3 +1688,8 @@ yuku-parser@0.19.0:
   dependencies:
     "@yuku-toolchain/types" "^0.19.0"
     yuku-core "0.19.0"
+
+zon@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/zon/-/zon-1.0.3.tgz"
+  integrity sha512-FKLlkaI8bU0ORFgZIzbqgvT7ei7aHob2jvhDPLgkwxccDurBRviDlD2eC2px6kEox0VlW0rK3VBwjsvtGV6g0w==

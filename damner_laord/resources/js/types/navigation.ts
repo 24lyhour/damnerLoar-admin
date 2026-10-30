@@ -16,7 +16,8 @@ export type NavItem = {
 /** Sidebar entry. Without an href it renders as a disabled "Soon" item. */
 export type SidebarNavItem = Omit<NavItem, 'href'> & {
     href?: NavItem['href'];
-    badge?: number;
+    /** Key in the shared `navBadges` prop, e.g. "merchants" */
+    badgeKey?: string;
 };
 
 export type NavGroup = {

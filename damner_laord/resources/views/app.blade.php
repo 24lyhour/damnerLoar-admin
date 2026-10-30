@@ -1,3 +1,10 @@
+{{--
+    InertiaUI Modal: on a direct visit to a modal URL it re-renders this view
+    with $page['url'] set to the modal URL. <x-inertia::app /> reads the page
+    from SsrState (filled earlier with the base URL), so sync it with $page,
+    otherwise the modal opens and instantly closes.
+--}}
+@php(app(\Inertia\Ssr\SsrState::class)->setPage($page))
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"  @class(['dark' => ($appearance ?? 'system') == 'dark'])>
     <head>
@@ -36,7 +43,7 @@
 
         @fonts
 
-        @vite(['resources/css/app.css', 'resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
+        @vite(['resources/css/app.css', 'resources/js/app.ts', \App\Support\InertiaPage::viteEntry($page['component'])])
         <x-inertia::head>
             <title>{{ config('app.name', 'Laravel') }}</title>
         </x-inertia::head>

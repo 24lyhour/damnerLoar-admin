@@ -1,3 +1,4 @@
+export { default as DamnerLaorRowActions } from './DamnerLaorRowActions.vue';
 export { default as DamnerLaorStatusTabs } from './DamnerLaorStatusTabs.vue';
 export { default as DamnerLaorTable } from './DamnerLaorTable.vue';
 export { default as DamnerLaorTablePagination } from './DamnerLaorTablePagination.vue';

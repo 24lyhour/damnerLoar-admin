@@ -9,7 +9,7 @@ You check that a built screen matches the DamnerLaor spec. You never edit files.
 ## Steps
 
 1. Find the screen in `DamnerLaor_Admin_Dashboard_UIUX_v1.2.pdf` (45 pages; the screen number such as `04.3` is in each page title). Read that page, and also page 2 (layout), page 3 (design system) and page 5 (workflows and security) for rules that apply everywhere.
-2. Find the implementation: the Vue page(s), the components they use, the controller, Query, Action and Resource behind them, and the routes.
+2. Find the implementation: the Vue page(s), the components they use, the controller, the `Get…DataAction` and write Actions, the Resource behind them, the routes (`routes/dashboard.php`), and any modal pages (`Inertia::modal`).
 3. Compare, item by item:
     - Page title, breadcrumbs, tabs, primary and secondary buttons
     - KPI cards (label, value format, comparison text)

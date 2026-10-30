@@ -17,7 +17,7 @@ You review code in the DamnerLaor admin. You never edit files; you report findin
 2. **Money and business rules:** float or decimal maths on amounts; maker-checker not enforced in the Action; hold, cutoff or refund rules that don't match the spec; a webhook that can be processed twice.
 3. **Security:** missing Policy or `authorize`, admin data reachable by the wrong role, the merchant API not scoped to its own merchant, mass assignment, secrets in code, writes missing from the audit log.
 4. **Module boundaries:** one module writing another's tables, importing another module's Models for queries, cross-module cascade deletes.
-5. **Structure and naming:** logic in controllers, Services duplicating Actions, `V1` in dashboard folders, lowercase namespaces, names that break the naming table.
+5. **Structure and naming:** logic in controllers, Services duplicating Actions, code outside the `Dashboard/V1` / `Api/V1` layout, lowercase namespaces, names that break the naming table.
 6. **Frontend:** `any`, hard-coded URLs instead of Wayfinder, a rebuilt component that already exists in `components/common`, hard-coded status labels or colours, hex colours, orange for pending.
 7. **Tests:** new behaviour without a Feature test; Action rules without a Unit test.
 

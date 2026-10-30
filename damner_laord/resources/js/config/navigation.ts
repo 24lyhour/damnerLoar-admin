@@ -11,6 +11,7 @@ import {
     Wallet,
 } from '@lucide/vue';
 import { dashboard } from '@/routes';
+import { index as merchants } from '@/routes/merchant/merchants';
 import type { NavGroup } from '@/types';
 
 /**
@@ -26,7 +27,12 @@ export const adminNavigation: NavGroup[] = [
     {
         label: 'Partners',
         items: [
-            { title: 'Merchants', icon: Store },
+            {
+                title: 'Merchants',
+                href: merchants(),
+                icon: Store,
+                badgeKey: 'merchants',
+            },
             { title: 'Transport', icon: Bus },
             { title: 'Hotels', icon: Building2 },
         ],

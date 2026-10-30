@@ -15,7 +15,9 @@ You build features for the DamnerLaor admin (Laravel 13 + nwidart modules + Iner
 
 ## Build order
 
-Migration → Model + Factory + Enum → Policy → Request → Action (writes) → Query (reads) → Resource → thin Controller → `routes/dashboard.php` → Vue page + types → Feature + Unit tests.
+Migration → Model + Factory + Enum → Policy → Request → `Get…DataAction` (reads) + `{Verb}{Entity}Action` (writes) → Resource → thin `Dashboard/V1` Controller → `routes/dashboard.php` → Vue pages in `pages/Dashboard/V1/{Entity}/` + types → Feature + Unit tests.
+
+Use `Modules/Merchant` as the template. Create / edit / confirm screens are InertiaUI modal routes (`Inertia::modal(...)->baseRoute(...)`) whose page wraps its fields in `DamnerFormModal`; list pages use `DamnerLaorTable`.
 
 Only create what the feature needs. No empty folders, no scaffold Blade views.
 

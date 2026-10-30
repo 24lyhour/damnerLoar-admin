@@ -2,7 +2,13 @@
 
 namespace Modules\Merchant\Providers;
 
+use App\Models\User;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
+use Modules\Merchant\Models\Merchant;
+use Modules\Merchant\Policies\MerchantPolicy;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class MerchantServiceProvider extends ModuleServiceProvider
@@ -33,6 +39,24 @@ class MerchantServiceProvider extends ModuleServiceProvider
         EventServiceProvider::class,
         RouteServiceProvider::class,
     ];
+
+    public function boot(): void
+    {
+        parent::boot();
+
+        // Module models aren't auto-discovered by Laravel's policy guesser.
+        Gate::policy(Merchant::class, MerchantPolicy::class);
+
+        // Sidebar badge "Merchants 3": applications waiting for review.
+        // A closure, so the count only runs when a page is rendered for an admin.
+        Inertia::share('navBadges.merchants', function (): ?int {
+            $user = Auth::user();
+
+            return $user instanceof User && $user->can('viewAny', Merchant::class)
+                ? Merchant::awaitingReviewCount()
+                : null;
+        });
+    }
 
     /**
      * Define module schedules.

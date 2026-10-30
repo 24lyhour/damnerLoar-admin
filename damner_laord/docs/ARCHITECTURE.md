@@ -28,112 +28,94 @@ Module names are **singular PascalCase**. Pending renames: `User` → `Admin`, `
 
 ---
 
-## 2. Inside a module
+## 2. Inside a module (universe layout)
 
-Organised **by layer, then by entity**. The example is Transport, whose entities are BusRoute, Trip, Vehicle and SeatLayout.
+Same structure as the `universe` project (`Modules/Hotel`): **Dashboard/V1** for admin code, **Api/V1/{Customer,Merchant}** for the mobile apps, one Action class per use case. The reference module is **Merchant**; copy it.
 
 ```
-Modules/Transport/
+Modules/Merchant/
 ├── app/
-│   ├── Models/                 BusRoute, Trip, Vehicle, SeatLayout, Seat
-│   ├── Enums/                  TripStatus, RouteStatus, SeatType
-│   ├── Actions/                WRITES, one use case per class
-│   │   ├── Trip/               CreateTripAction, DelayTripAction, CancelTripAction
-│   │   └── SeatLayout/         SaveSeatLayoutAction
-│   ├── Queries/                READS: filters, search, paging, stats
-│   │   └── Trip/               TripListQuery, TripStatsQuery, TripManifestQuery
+│   ├── Models/                         Merchant, MerchantDocument, MerchantNote
+│   ├── Enums/                          MerchantStatus, MerchantType, MerchantDocument{Type,Status}
+│   ├── Actions/Dashboard/V1/
+│   │   ├── MerchantAction/             READS:  GetMerchant{Index,Show,Edit,Create}DataAction
+│   │   │                               WRITES: InviteMerchantAction, UpdateMerchantAction,
+│   │   │                                       Approve/Reject/Suspend/Reactivate…, TransitionMerchantStatusAction
+│   │   ├── MerchantDocumentAction/     VerifyMerchantDocumentAction
+│   │   └── MerchantNoteAction/         AddMerchantNoteAction
 │   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── Dashboard/      TripController …                   (admin, Inertia)
-│   │   │   └── Api/V1/
-│   │   │       ├── Customer/   TripSearchController …             (customer app)
-│   │   │       └── Merchant/   BoardingScanController …           (merchant app)
-│   │   ├── Requests/Dashboard/Trip/   StoreTripRequest, DelayTripRequest
-│   │   └── Resources/
-│   │       ├── Dashboard/      TripResource
-│   │       └── Api/V1/{Customer,Merchant}/
-│   ├── Policies/               TripPolicy
-│   ├── Events/                 TripDelayed, TripCancelled
-│   ├── Listeners/              SendTripDelaySms (queued)
-│   ├── Contracts/              TripLookup        (public read API for other modules)
-│   ├── Services/               TripLookupService (implements the contract)
-│   └── Providers/
+│   │   ├── Controllers/Dashboard/V1/   MerchantController, MerchantReviewController, …   (thin)
+│   │   ├── Controllers/Api/V1/{Customer,Merchant}/                                         (mobile apps)
+│   │   ├── Requests/Dashboard/V1/MerchantRequest/   Index/Invite/Update/…Request
+│   │   └── Resources/                  MerchantListResource, MerchantDetailResource, …
+│   ├── Policies/  Events/  Listeners/  Notifications/  Contracts/  Providers/
 ├── database/{migrations,factories,seeders}/
 ├── routes/
-│   ├── dashboard.php           admin pages
-│   ├── api/customer/v1.php
-│   └── api/merchant/v1.php
+│   ├── dashboard.php                   admin pages + modals, prefix /dashboard (RouteServiceProvider::mapDashboardRoutes)
+│   ├── web.php                         public web routes (usually empty)
+│   └── api.php → api/customer/v1.php, api/merchant/v1.php
 ├── resources/js/
-│   ├── pages/Dashboard/Trip/   Index.vue, Show.vue
-│   ├── components/             TransportTabs.vue, SeatMap.vue, ManifestTable.vue
-│   ├── types/index.ts
-│   └── validations/            zod schemas
-└── tests/
-    ├── Feature/Dashboard/      TripTest
-    └── Unit/Actions/           CancelTripActionTest
+│   ├── pages/Dashboard/V1/Merchant/    Index, Show (pages) · Invite, Edit, Review (modals)
+│   ├── components/Dashboards/v1/       MerchantForm (fields), MerchantDashboardComponent/*
+│   ├── types/index.ts                  props of every page, mirrors the Resources
+│   └── validations/                    zod schemas (when a form needs client checks)
+└── tests/Feature/                      one file per screen/flow
 ```
 
 **Don't create empty folders.** Add `Events/`, `Contracts/` and so on only when something goes in them.
 
+### Modals (InertiaUI Modal, universe's momentum-modal for Inertia v3)
+
+- **Create / edit / confirm screens are server routes rendered as modals:** `GET` returns `Inertia::modal('merchant::Dashboard/V1/Merchant/Edit', $data)->baseRoute('merchant.merchants.show', $merchant)`, and the matching `POST`/`PATCH` does the work and returns `back()` with a flash toast.
+- **Opening:** `<ModalLink :href="edit({ merchant }).url">` for buttons, or `RowAction { href, modal: true }` in `DamnerLaorRowActions`. A direct visit to the URL shows the base page with the modal on top.
+- **The page component** wraps its fields in `DamnerFormModal` (universe's `ModalForm`): right-hand slideover, persistent (only X / Cancel / save closes it), Inertia `<Form>` posting to a Wayfinder `.form()` route.
+- **Status confirmations** use one page (`Review.vue`) and one controller action (`confirm`) for every status change, like universe's `confirmDelete` + `Delete.vue`.
+
 ### Responsibilities
 
-| Layer            | Does                                                                                             | Never does                                             |
-| ---------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
-| Controller       | Authorize, take the validated Request, call one Action or Query, return a page, redirect or JSON | Business logic, queries, `$request->validate()` inline |
-| Request          | Validation rules, `authorize()` through the Policy                                               | Database writes                                        |
-| Action           | One write use case inside `DB::transaction`, audit log, dispatch events                          | Return HTTP responses, read `request()`                |
-| Query            | Filters, search, sort, paginate, stats, eager loading                                            | Writes                                                 |
-| Resource         | Shapes a model for Vue or the API (camelCase keys, Money as cents + formatted)                   | Queries (relations must already be loaded)             |
-| Enum             | `label()`, `labelKh()`, `tone()`, static `options()`                                             | Database access                                        |
-| Policy           | Role and ownership checks                                                                        | Business rules (those go in the Action)                |
-| Event / Listener | Tell other modules something happened; slow work runs queued                                     | Change another module's tables directly                |
+| Layer            | Does                                                                                     | Never does                                             |
+| ---------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Controller       | Authorize, take the validated Request, call one Action, return a page / modal / redirect | Business logic, queries, `$request->validate()` inline |
+| Request          | Validation rules, `authorize()` through the Policy                                       | Database writes                                        |
+| `Get…DataAction` | Build a page's props: filters, search, sort, paginate, stats, eager loading              | Writes                                                 |
+| Write Action     | One write use case inside `DB::transaction`, audit log, dispatch events                  | Return HTTP responses, read `request()`                |
+| Resource         | Shapes a model for Vue or the API (camelCase keys, Money as cents + formatted)           | Queries (relations must already be loaded)             |
+| Enum             | `label()`, `labelKh()`, `tone()`, static `options()`                                     | Database access                                        |
+| Policy           | Role and ownership checks                                                                | Business rules (those go in the Action)                |
+| Event / Listener | Tell other modules something happened; slow work runs queued                             | Change another module's tables directly                |
 
-### One feature end to end ("Delay trip", spec 04.3)
+### One feature end to end ("Suspend merchant")
 
 ```
-POST /transport/trips/{trip}/delay                 name: transport.trips.delay
-  → Dashboard\TripController@delay
-      → DelayTripRequest      (minutes, reason; TripPolicy::delay)
-      → DelayTripAction::execute($trip, $data)
-          DB::transaction → update trip → audit log → event TripDelayed
-  ← back() with flash "Trip delayed 20 min"
-TripDelayed → Booking + Support listeners → queued SMS to passengers
-```
-
-### A list page
-
-```php
-public function index(IndexTripRequest $request, TripListQuery $list, TripStatsQuery $stats): Response
-{
-    return Inertia::render('transport::Dashboard/Trip/Index', [
-        'trips'    => TripResource::collection($list->paginate($request->filters())),
-        'stats'    => $stats->today(),
-        'filters'  => $request->filters(),
-        'statuses' => TripStatus::options(),
-    ]);
-}
+GET  /dashboard/merchants/{uuid}/suspend      merchant.merchants.confirm-suspend
+  → MerchantReviewController@confirm → Inertia::modal('merchant::Dashboard/V1/Merchant/Review') (slideover)
+POST /dashboard/merchants/{uuid}/suspend      merchant.merchants.suspend
+  → MerchantReasonRequest (reason; MerchantPolicy::suspend)
+  → SuspendMerchantAction → TransitionMerchantStatusAction
+      DB::transaction → status = suspended → event MerchantStatusChanged (after commit)
+  ← back() + flash toast; the modal closes
 ```
 
 ---
 
 ## 3. Naming
 
-| Thing               | Pattern                               | Example                                                                               |
-| ------------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
-| Model               | singular                              | `Trip`, `BusRoute` (avoid names that clash with Laravel: `Route`, `Request`, `Event`) |
-| Table               | plural snake case                     | `seat_layouts`                                                                        |
-| Write               | `{Verb}{Entity}Action`                | `CancelTripAction`                                                                    |
-| Read                | `{Entity}{Purpose}Query`              | `TripManifestQuery`                                                                   |
-| Validation          | `{Verb}{Entity}Request`               | `DelayTripRequest`                                                                    |
-| Enum                | `{Entity}{Thing}`                     | `TripStatus`                                                                          |
-| Event               | past tense                            | `TripCancelled`                                                                       |
-| Route name          | `{module}.{entities}.{action}`        | `transport.trips.delay`                                                               |
-| URL                 | `/{module}/{entities}` kebab case     | `/transport/seat-layouts`                                                             |
-| Inertia page        | `{module}::Dashboard/{Entity}/{Page}` | `transport::Dashboard/Trip/Show`                                                      |
-| Vue component       | PascalCase, entity first              | `TripStatusCard.vue`                                                                  |
-| Primary key in URLs | `uuid`                                | `/transport/trips/9f1c…`                                                              |
+| Thing               | Pattern                                  | Example                                                                     |
+| ------------------- | ---------------------------------------- | --------------------------------------------------------------------------- |
+| Model               | singular                                 | `Merchant`, `BusRoute` (avoid Laravel clashes: `Route`, `Request`, `Event`) |
+| Table               | plural snake case                        | `merchant_documents`                                                        |
+| Read (page props)   | `Get{Entity}{Page}DataAction`            | `GetMerchantIndexDataAction`                                                |
+| Write               | `{Verb}{Entity}Action`                   | `SuspendMerchantAction`                                                     |
+| Validation          | `{Verb}{Entity}Request`                  | `InviteMerchantRequest`                                                     |
+| Enum                | `{Entity}{Thing}`                        | `MerchantStatus`                                                            |
+| Event               | past tense                               | `MerchantStatusChanged`                                                     |
+| Route name          | `{module}.{entities}.{action}`           | `merchant.merchants.suspend`, modal: `merchant.merchants.confirm-suspend`   |
+| URL                 | `/dashboard/{entities}` kebab case       | `/dashboard/merchants/{uuid}/edit`                                          |
+| Inertia page        | `{module}::Dashboard/V1/{Entity}/{Page}` | `merchant::Dashboard/V1/Merchant/Show`                                      |
+| Vue component       | PascalCase, entity first                 | `MerchantChecklistCard.vue`                                                 |
+| Primary key in URLs | `uuid`                                   | `/dashboard/merchants/9f1c…`                                                |
 
-**Versioning:** only the mobile APIs are versioned (`Api/V1`, `/api/v1/...`). Admin pages ship together with the backend, so there's no `V1` in dashboard folders.
+**Watch the `/dashboard` prefix:** the Dashboard's own tabs use `/dashboard/bookings`, `/dashboard/finance` and `/dashboard/trips`. When building the Booking or Finance module, give their lists a different path (for example `/dashboard/booking-list`) or move the Dashboard tabs, so routes don't collide.
 
 ---
 
@@ -171,9 +153,16 @@ public function index(IndexTripRequest $request, TripListQuery $list, TripStatsQ
 
 ## 6. Frontend
 
-- **Shared UI:** `resources/js/components/ui/` (shadcn-vue) and `resources/js/components/common/` (`PageHeader`, `PageTabs`, `SectionCard`, `KpiCard`, `KpiGrid`, `DataTable`, `StatusBadge`, `BarList`, `ActivityFeed`, `ProgressBar`), plus `components/charts/`.
-- **Module UI:** `Modules/<Name>/resources/js/{pages,components,types,validations}`.
-- **Page resolution:** `module::Path` resolves to `Modules/<Module>/resources/js/pages/<Path>.vue`. Plain names resolve to `resources/js/pages/`.
+- **Shared UI:**
+    - `resources/js/components/ui/`: shadcn-vue primitives.
+    - `resources/js/components/common/`: `PageHeader`, `PageTabs`, `SectionCard`, `KpiCard`, `KpiGrid`, `DataTable` (small card tables), `StatusBadge`, `BarList`, `ActivityFeed`, `ProgressBar`.
+    - `resources/js/components/DamnerLaorTable/`: list pages. `DamnerLaorTable`, `DamnerLaorStatusTabs`, `DamnerLaorTableToolbar`, `DamnerLaorTableSelectFilter`, `DamnerLaorRowActions` ("⋯" menu), `useTableQuery()` (search / filters / sort / paging in the URL, server-side).
+    - `resources/js/components/DamnerFormModal/`: `DamnerFormModal` (InertiaUI modal + Inertia `<Form>`, right slideover, persistent) and `DamnerFormField`.
+    - `resources/js/components/charts/`: `LineChart`, `BarChart`, `DoughnutChart`.
+- **Module UI:** `Modules/<Name>/resources/js/{pages/Dashboard/V1,components/Dashboards/v1,types,validations}`.
+- **Page resolution:** `merchant::Dashboard/V1/Merchant/Index` resolves to `Modules/Merchant/resources/js/pages/Dashboard/V1/Merchant/Index.vue` (`lib/resolvePage.ts` on the client, `App\Support\InertiaPage` for `@vite`). Plain names resolve to `resources/js/pages/`.
+- **Modals:** InertiaUI Modal v3 is set up once in `app.ts` (`renderApp` + `putConfig`: slideover from the right, persistent). `app.blade.php` syncs Inertia's `SsrState` so a modal URL opened directly shows its base page with the modal on top.
+- **Imports:** module files import shared code with `@/…` and module code with relative paths. The type-check can't detect a broken `.vue` path (`vue-shims.d.ts` accepts any), so check imports after moving files.
 - **Status display:** each backend enum provides `label` and `tone`. The Vue side never hard-codes labels or colours. Tones are `success` (green), `error` (red), `neutral` (grey, for anything pending; **never orange**) and `brand` (blue, in progress).
 - **Brand:** blue `#174A8B`, white `#FFFFFF`, light grey `#F3F6FA`, Inter font, Noto Sans Khmer for Khmer text, booking references in monospace.
 
@@ -182,15 +171,17 @@ public function index(IndexTripRequest $request, TripListQuery $list, TripStatsQ
 ## 7. Testing
 
 - **Feature test per screen:** a guest is redirected, a role without permission gets 403, the allowed role sees the right Inertia component and props.
+- **Modal routes:** assert the base page component and `props._inertiaui_modal.component` / `.props` (see `Modules/Merchant/tests/Feature/MerchantModalTest.php`), plus the 403 for users who may not open it.
 - **Unit test per Action** with real business rules: maker-checker, money maths, hold expiry, status transitions.
 - **Factories** for every model, with states (`->suspended()`, `->delayed()`).
-- **Database:** SQLite in memory (`phpunit.xml`), `RefreshDatabase`.
+- **Database:** SQLite in memory (`phpunit.xml`), `RefreshDatabase`. The base `TestCase` calls `withoutVite()`, so tests don't depend on a build.
+- **Where tests live:** app tests in `tests/`, module tests in `Modules/<Name>/tests/` (the `Modules` suite in `phpunit.xml` runs them). Frontend helpers: Vitest, `npm test`.
 
 ---
 
 ## Lessons from universe
 
-Keep: Actions per use case, Dashboard vs `Api/V1/{Customer,Merchant}` split, rich enums with `labelKh()`, separate route files, Request classes per entity, uuid keys plus soft delete and trash, zod validation, module-local Vue pages.
+Keep: Actions per use case (including `Get…DataAction` reads), `Dashboard/V1` vs `Api/V1/{Customer,Merchant}` split, server-rendered modals, rich enums with `labelKh()`, separate route files, Request classes per entity, uuid keys plus soft delete and trash, zod validation, module-local Vue pages.
 
 Don't repeat:
 
@@ -199,5 +190,4 @@ Don't repeat:
 - **Empty `Contracts/` or `Repositories/` folders.**
 - **Lowercase namespace folders** (`api/customer/v1`): breaks PSR-4 autoloading on Linux.
 - **`decimal:2` money:** use integer cents.
-- **`V1` on admin pages:** only APIs are versioned.
-- **Index actions doing everything:** split into List and Stats Queries.
+- **momentum-modal:** it only supports Inertia v1/v2. This project runs Inertia v3, so it uses **InertiaUI Modal** (same `Inertia::modal()->baseRoute()` idea).

@@ -98,11 +98,29 @@ class Merchant extends Model
     }
 
     /**
+     * Internal admin notes, newest first (spec 03.2).
+     *
+     * @return HasMany<MerchantNote, $this>
+     */
+    public function notes(): HasMany
+    {
+        return $this->hasMany(MerchantNote::class)->latest();
+    }
+
+    /**
      * @return BelongsTo<User, $this>
      */
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /** Applications waiting for review: the sidebar badge "Merchants 3". */
+    public static function awaitingReviewCount(): int
+    {
+        return static::query()
+            ->whereIn('status', [MerchantStatus::Pending, MerchantStatus::ChangesRequested])
+            ->count();
     }
 
     /**

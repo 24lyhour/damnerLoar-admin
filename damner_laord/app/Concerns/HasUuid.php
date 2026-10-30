@@ -5,18 +5,19 @@ namespace App\Concerns;
 use Illuminate\Support\Str;
 
 /**
- * Public identifier for a model: filled on create and used in URLs,
- * so internal numeric ids never leak to the browser or the apps.
+ * Public identifier for a model, used in URLs so internal numeric ids
+ * never leak to the browser or the apps. Requires a unique `uuid` column.
  *
- * Requires a unique `uuid` column.
+ * The uuid is set when the model object is built (not in a "creating"
+ * event), so it also works when events are muted, e.g. in seeders that use
+ * WithoutModelEvents. Models loaded from the database get theirs replaced
+ * by the stored value.
  */
 trait HasUuid
 {
-    public static function bootHasUuid(): void
+    public function initializeHasUuid(): void
     {
-        static::creating(function (self $model): void {
-            $model->uuid ??= (string) Str::uuid();
-        });
+        $this->attributes['uuid'] ??= (string) Str::uuid();
     }
 
     public function getRouteKeyName(): string

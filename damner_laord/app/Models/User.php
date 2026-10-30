@@ -16,6 +16,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
  * @property int $id
+ * @property int|null $merchant_id Set for merchant-app staff; null for admins
  * @property string $name
  * @property string $email
  * @property Carbon|null $email_verified_at
